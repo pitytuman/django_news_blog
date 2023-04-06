@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Статьи автора:
+{% endblock title %}
+
+{% block content %}
+<a href="{% url 'profile' request.user.pk %}">Изменить</a>
+<div class="mb-5">
+    <h3 class="text-center">Об авторе</h3>
+    <div class="d-flex gap-3">
+        <div class="col-3">
+            <ul class="list-group">
+                <li class="list-group-item">Username: <b>{{ user.username }}</b></li>
+                <li class="list-group-item">Email: <b>{{ user.email }}</b></li>
+                <li class="list-group-item">Joined: <b>{{ user.date_joined.date }}</b></li>
+            </ul>
+        </div>
+        <div class="col-9">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    Общее кол-во просмотров статей: <b>{{ total_views }}</b>
+                </li>
+                <li class="list-group-item">
+                    Общее кол-во комментариев статей: <b>{{ total_comments }}</b>
+                </li>
+                <li class="list-group-item">
+                    Общее кол-во статей: <b>{{ total_posts }}</b>
+                </li>
+                <li class="list-group-item">
+                    С нами уже: <b>{{ days_left }}</b>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    {% for article in articles %}
+        <div class="col-6">
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        {% if article.image %}
+                        <img src="{{ article.image.url }}" class="img-fluid rounded-start" alt="...">
+                        {% else %}
+                        <img src="https://images.satu.kz/126101312_w640_h640_razdel-v-razrabotketovary.jpg" class="img-fluid rounded-start" alt="...">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ article.title }}</h5>
+                            <div class="card-text mb-1">
+                                Автор статьи:
+                                <a href="" class="text-dark">
+                                    <b><i>{{ article.author }}</i></b>
+                                </a>
+                            </div>
+                            <p class="card-text">{{ article.content|truncatechars:300 }}</p>
+                            <p class="card-text"><small class="text-muted">Последнее обновление <b>{{ article.updated_at }}</b></small></p>
+                            <div class="text-end">
+                                <a href="{{ article.get_absolute_url }}" class="btn btn-primary">Подробнее...</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}

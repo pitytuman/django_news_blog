@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Статья: {{ title }}
+{% endblock title %}
+
+{% block content %}
+<div class="card mb-3">
+    <div class="row g-0">
+        <div class="col-md-3">
+            {% if article.image %}
+            <img src="{{ article.image.url }}" class="img-fluid rounded-start" alt="...">
+            {% else %}
+            <img src="https://images.satu.kz/126101312_w640_h640_razdel-v-razrabotketovary.jpg"
+                 class="img-fluid rounded-start" alt="...">
+            {% endif %}
+        </div>
+        <div class="col-md-9">
+            <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                {% if article.author == request.user or request.user.is_superuser%}
+                <div class="text-end">
+                    <a href="{% url 'update' article.pk %}"><span class="badge text-bg-primary">Редактировать</span></a>
+
+                    <a href="{% url 'delete' article.pk %}"><span class="badge text-bg-danger">Удалить</span></a>
+                </div>
+                {% endif %}
+                <p class="card-text">{{ article.content }}</p>
+                <p class="card-text">
+                    <small class="text-muted">
+                        Последнее обновление <b>{{ article.updated_at }}</b>
+                    </small>
+                </p>
+            </div>
+            <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item">
+                    Автор статьи:
+                    <a href="{% url 'author_articles' article.author %}" class="text-dark">
+                        <b><i>{{ article.author }}</i></b>
+                    </a>
+                </li>
+                <li class="list-group-item">Категория: <b><i>{{ article.category }}</i></b></li>
+                <li class="list-group-item">Просмотров: <b><i>{{ article.views }}</i></b></li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+<div>
+    <h3 class="text-center">Комментарии к посту</h3>
+    {% if not request.user.is_authenticated %}
+    <p>
+        Писать комментарии могут лишь авторизованные пользователи
+        <a href="{% url 'login' %}">Войти</a>
+    </p>
+    {% else %}
+    <form action="" method="post" class="mb-4">
+        {% csrf_token %}
+        {{ form }}
+        <button class="btn btn-dark mt-2">Отправить</button>
+    </form>
+    {% endif %}
+    <div>
+        {% for comment in comments %}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                {{ comment.added_at }}
+                <div>
+                    {% if request.user == comment.author %}
+                    <a href="{% url 'update_comment' comment.pk %}" class="text-warning fs-5 text-decoration-none me-2">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    {% endif %}
+
+                    {% if request.user == comment.author or request.user.is_superuser %}
+                    <a href="{% url 'delete_comment' comment.pk %}" class="text-danger fs-5 text-decoration-none me-2">
+                        <i class="bi bi-trash3-fill"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>{{ comment.content }}</p>
+                    <footer class="blockquote-footer">
+                        <cite title="{{ comment.author }}">{{ comment.author }}</cite>
+                    </footer>
+                </blockquote>
+            </div>
+        </div>
+        {% empty %}
+        <p>Комментариев пока нет...</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

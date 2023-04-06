@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Авторизация
+{% endblock title %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+    {% include 'components/errors.html' %}
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary">Войти</button>
+    </div>
+</form>
+{% endblock content %}
