@@ -13,7 +13,7 @@ from .forms import LoginForm, RegistrationForm, ArticleForm, CommentForm, Custom
 # Отображение главной страницы с помощью класса
 class HomePageView(ListView):
     model = Article
-    template_name = 'web_site/index.html'
+    template_name = 'pages/index.html'
     context_object_name = 'articles'
 
 
@@ -30,7 +30,7 @@ class SearchResult(HomePageView):
 #     context = {
 #         'articles': articles
 #     }
-#     return render(request, 'web_site/index.html', context)
+#     return render(request, 'pages/index.html', context)
 
 
 def category_articles(request, category_id):
@@ -40,7 +40,7 @@ def category_articles(request, category_id):
         'articles': articles,
         'category': category
     }
-    return render(request, 'web_site/index.html', context)
+    return render(request, 'pages/index.html', context)
 
 
 def article_detail(request, article_id):
@@ -89,7 +89,7 @@ def article_detail(request, article_id):
         'form': form,
         'comments': comments
     }
-    return render(request, 'web_site/article_detail.html', context)
+    return render(request, 'pages/article_detail.html', context)
 
 
 def login_view(request):
@@ -111,7 +111,7 @@ def login_view(request):
         'form': form
     }
 
-    return render(request, 'web_site/login.html', context)
+    return render(request, 'pages/login.html', context)
 
 
 def registration_view(request):
@@ -127,7 +127,7 @@ def registration_view(request):
     context = {
         'form': form
     }
-    return render(request, 'web_site/registration.html', context)
+    return render(request, 'pages/registration.html', context)
 
 
 def user_logout(request):
@@ -149,7 +149,7 @@ def create_article(request):
     context = {
         'form': form
     }
-    return render(request, 'web_site/article_form.html', context)
+    return render(request, 'pages/article_form.html', context)
 
 
 @login_required(login_url='login')
@@ -168,28 +168,28 @@ def author_articles_view(request, username):
         'total_posts': articles.count(),
         'days_left': days_left.days
     }
-    return render(request, 'web_site/my_articles.html',context)
+    return render(request, 'pages/my_articles.html',context)
 
 
 class UpdateArticle(UpdateView):
     model = Article
     form_class = ArticleForm
-    template_name = 'web_site/article_form.html'
+    template_name = 'pages/article_form.html'
 
 class DeleteArticle(DeleteView):
     model = Article
     success_url = '/'
-    template_name = 'web_site/article_confirm_delete.html'
+    template_name = 'pages/article_confirm_delete.html'
 
 
 class ChangeUserData(UpdateView):
     model = User
     form_class = CustomUserChangeForm
-    template_name = 'web_site/profile.html'
+    template_name = 'pages/profile.html'
     success_url = 'home'
 
 def user_profile(request, username):
-    return render(request, 'web_site/profile.html')
+    return render(request, 'pages/profile.html')
 
 
 def delete_comment(request, comment_id):
@@ -201,7 +201,7 @@ def delete_comment(request, comment_id):
 
 class UpdateComment(UpdateView):
     model = Comment
-    template_name = 'web_site/article_detail.html'
+    template_name = 'pages/article_detail.html'
     form_class = CommentForm
 
     def form_valid(self, form):
