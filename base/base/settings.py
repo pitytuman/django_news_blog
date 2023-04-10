@@ -27,8 +27,8 @@ SECRET_KEY = 'django-insecure-1)lm*k(+d1s%$#w#4o5a06g&ssaa^mxai=s4=00qp#!5x!y)f9
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'pitytuman.pythonanywhere.com/',
-    'http://127.0.0.1:8000'
+    'pitytuman.pythonanywhere.com',
+    '127.0.0.1'
 ]
 
 
